@@ -81,6 +81,49 @@ Application and platform change at different rates, so delivery is split across 
 
 **Delivery flow:** push to the app repo → build, scan, and push images to ECR → `repository_dispatch` to the platform repo → commit updated `image.tag` values → Argo CD reconciles the cluster from Git.
 
+Folder layout of the private repositories (directories only):
+
+```
+petclinic-platform/
+├── terraform/                    # Infrastructure as Code
+│   ├── environments/
+│   │   ├── dev/                  # Dev environment root module
+│   │   └── prod/                 # Prod environment root module
+│   └── modules/                  # Reusable modules
+│       ├── vpc/                  # VPC, public+private subnets, IGW, NAT (1 dev / 2 prod), SGs
+│       ├── eks/                  # EKS cluster, node groups, OIDC, IAM
+│       ├── ecr/                  # ECR repos (per service per env), lifecycle policies
+│       ├── rds/                  # RDS MySQL, subnet group, parameter group
+│       ├── dns/                  # Route 53, ACM certificates
+│       ├── secrets/              # Secrets Manager resources
+│       ├── observability/        # Prometheus, Grafana, CloudWatch, FluentBit
+│       ├── karpenter/            # NodePools, EC2NodeClass, on-demand ARM
+│       └── github-oidc/          # GitHub Actions OIDC role (dev only, account-scoped)
+├── k8s/
+│   ├── argocd/                   # ApplicationSets, projects, install
+│   ├── security/                 # NetworkPolicy, ResourceQuota (dev / prod)
+│   ├── karpenter/                # NodePool and EC2NodeClass manifests
+│   ├── k8sgpt/                   # Cluster insights (day-2)
+│   ├── base/                     # Namespaces, External Secrets
+│   └── observability/            # Prometheus rules, Grafana dashboards
+├── helm/
+│   └── petclinic-service/        # Generic chart (shared by all 8 services)
+├── helm-values/                  # Per-service YAML + per-env (dev.yaml, prod.yaml)
+├── .github/workflows/            # Platform CI (Argo CD handles CD)
+├── scripts/
+│   ├── bootstrap/                # One-time TF state backend (S3 + DynamoDB)
+│   ├── helm/                     # Helm lint / template / dry-run
+│   ├── k8s/                      # apply / delete / clean leftovers
+│   ├── env/                      # status / stop / start
+│   ├── checks/                   # AZ spread checks
+│   └── terraform/                # Terraform output / value checks
+└── docs/                         # Architecture + ADRs
+
+spring-petclinic-microservices/
+├── spring-petclinic-*/           # Eight Spring Boot services
+└── .github/workflows/            # build-push.yml (CI only)
+```
+
 This write-up describes how the system is built, delivered, and operated on AWS. The implementation stays in the private repositories.
 
 ---
