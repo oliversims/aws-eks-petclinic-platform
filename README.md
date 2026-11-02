@@ -13,11 +13,9 @@
 [![Argo CD](https://img.shields.io/badge/CD-Argo%20CD-EF7B4D.svg)](https://argo-cd.readthedocs.io/)
 [![Karpenter](https://img.shields.io/badge/Autoscaling-Karpenter-FFA500.svg)](https://karpenter.sh/)
 
-| | |
-|--|--|
-| **Region** | `us-east-1` |
-| **DNS zone** | `simsoliver.com` |
-| **Environments** | `dev` · `prod` |
+| **Region** | **DNS zone** | **Environments** |
+|------------|--------------|------------------|
+| `us-east-1` | `simsoliver.com` | `dev` · `prod` |
 
 > **Note:** This repository is the public portfolio write-up. Application source, Terraform, Helm, Kubernetes manifests, and operator scripts remain in **private** repositories and are available on request. After end-to-end validation, **all AWS infrastructure was destroyed** to avoid ongoing EKS, NAT, and ALB cost. Screenshots below are from that live run.
 
