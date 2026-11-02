@@ -19,9 +19,7 @@
 | **DNS zone** | `simsoliver.com` |
 | **Environments** | `dev` · `prod` |
 
-> **Note:** This repository is the public portfolio write-up. Application source, Terraform, Helm charts, Kubernetes manifests, and operator scripts remain in **private** repositories and are available on request.
-
-> **Note:** After end-to-end validation, **all AWS infrastructure was destroyed** to avoid ongoing EKS, NAT, and ALB cost. Screenshots and figures below are evidence from that live deployment. The stack can be rebuilt with Terraform and the operator runbooks in the private repositories.
+> **Note:** This repository is the public portfolio write-up. Application source, Terraform, Helm, Kubernetes manifests, and operator scripts remain in **private** repositories and are available on request. After end-to-end validation, **all AWS infrastructure was destroyed** to avoid ongoing EKS, NAT, and ALB cost. Screenshots below are from that live run.
 
 ---
 
@@ -42,7 +40,6 @@
 13. [Security practices](#13-security-practices)
 14. [Environment comparison](#14-environment-comparison)
 15. [Outcomes](#15-outcomes)
-16. [Explore the code](#16-explore-the-code)
 
 ---
 
@@ -110,6 +107,8 @@ petclinic-platform/
 │   └── petclinic-service/        # Generic chart (shared by all 8 services)
 ├── helm-values/                  # Per-service YAML + per-env (dev.yaml, prod.yaml)
 ├── .github/workflows/            # Platform CI (Argo CD handles CD)
+├── .claude/                      # Rules, hooks, agents, skills
+├── CLAUDE.md                     # Session brief
 ├── scripts/
 │   ├── bootstrap/                # One-time TF state backend (S3 + DynamoDB)
 │   ├── helm/                     # Helm lint / template / dry-run
@@ -123,8 +122,6 @@ spring-petclinic-microservices/
 ├── spring-petclinic-*/           # Eight Spring Boot services
 └── .github/workflows/            # build-push.yml (CI only)
 ```
-
-This write-up describes how the system is built, delivered, and operated on AWS. The implementation stays in the private repositories.
 
 ---
 
@@ -512,31 +509,6 @@ What this portfolio demonstrates:
 4. **Operational maturity** — validation scripts, AZ checks, env pause/resume, and clean teardown helpers  
 5. **Security defaults** — private networking, Secrets Manager, image scanning, NetworkPolicy, and WAF  
 6. **AI-assisted platform engineering** — backlog and technical spec as the contract, Claude Code rules/hooks/agents as the execution environment, human review on the critical path  
-
----
-
-## 16. Explore the code
-
-| Area | Path |
-|------|------|
-| Terraform environments | `terraform/environments/{dev,prod}/` |
-| Shared modules | `terraform/modules/` |
-| Helm chart | `helm/petclinic-service/` |
-| Values | `helm-values/` |
-| Argo CD | `k8s/argocd/` |
-| Security policies | `k8s/security/` |
-| Ops scripts | `scripts/` |
-| Delivery backlog | `docs/jira-backlog.md` |
-| Technical specification | `docs/technical-spec.md` |
-| Claude session brief | `CLAUDE.md` |
-| Claude rules / hooks / agents / skills | `.claude/` |
-| Architecture notes | `docs/architecture.md` |
-| Decision records | `docs/adr/` |
-| Figures | `docs/images/` |
-
-Application CI workflow: `.github/workflows/build-push.yml` in the private application repository.
-
-Those paths are in the private repositories and are available on request.
 
 ---
 
